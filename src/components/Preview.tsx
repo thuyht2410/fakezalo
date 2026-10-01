@@ -503,11 +503,18 @@ export const ChatWindow = React.forwardRef<HTMLDivElement, PreviewProps>(functio
           flexShrink: 0,
         }}
       >
-        <ChevronLeft size={28 * scale} strokeWidth={1.5} style={{ marginLeft: -8 * scale, cursor: "pointer" }} />
-        <div style={{ flex: 1, minWidth: 0, marginLeft: -4 * scale }}>
+        {/* Back — chevron trắng nét mảnh, không nền/không vòng tròn, căn giữa dọc header */}
+        <ChevronLeft
+          size={18 * scale}
+          strokeWidth={1.7}
+          color="#fff"
+          style={{ marginLeft: -8 * scale, flexShrink: 0 }}
+        />
+        {/* Khối tên + trạng thái — một khối compact, căn trái, căn giữa dọc */}
+        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "center" }}>
           <div
             style={{
-              fontSize: 16 * scale,
+              fontSize: 14 * scale,
               fontWeight: 600,
               color: "#fff",
               whiteSpace: "nowrap",
@@ -521,6 +528,7 @@ export const ChatWindow = React.forwardRef<HTMLDivElement, PreviewProps>(functio
           <div
             style={{
               fontSize: 11 * scale,
+              fontWeight: 400,
               color: "rgba(255,255,255,0.9)",
               lineHeight: 1.2,
               marginTop: 1 * scale,
