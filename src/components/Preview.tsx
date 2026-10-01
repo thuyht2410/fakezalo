@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import {
+  ChevronLeft,
   Phone,
   Video,
-  Search,
   MoreVertical,
   MoreHorizontal,
   Mic,
@@ -434,7 +434,7 @@ export const ChatWindow = React.forwardRef<HTMLDivElement, PreviewProps>(functio
   ref
 ) {
   const headerH = DIMENSIONS.headerHeight * scale;
-  const avatarH = DIMENSIONS.avatarHeader * scale;
+
   const compH = config.showComposer ? DIMENSIONS.composerHeight * scale : 0;
   const convoRef = useRef<HTMLDivElement>(null);
   const stickToBottomRef = useRef(true); // mặc định bám đáy
@@ -503,31 +503,27 @@ export const ChatWindow = React.forwardRef<HTMLDivElement, PreviewProps>(functio
           flexShrink: 0,
         }}
       >
-        <Avatar
-          src={config.avatarUrl}
-          name={config.name}
-          size={avatarH}
-          onlineDot={config.presence === "online"}
-        />
-        <div style={{ flex: 1, minWidth: 0 }}>
+        <ChevronLeft size={28 * scale} strokeWidth={1.5} style={{ marginLeft: -8 * scale, cursor: "pointer" }} />
+        <div style={{ flex: 1, minWidth: 0, marginLeft: -4 * scale }}>
           <div
             style={{
-              fontSize: 15 * scale,
+              fontSize: 16 * scale,
               fontWeight: 600,
               color: "#fff",
               whiteSpace: "nowrap",
               overflow: "hidden",
               textOverflow: "ellipsis",
-              lineHeight: 1.3,
+              lineHeight: 1.2,
             }}
           >
             {config.name || "…"}
           </div>
           <div
             style={{
-              fontSize: 12 * scale,
-              color: "rgba(255,255,255,0.85)",
-              lineHeight: 1.3,
+              fontSize: 11 * scale,
+              color: "rgba(255,255,255,0.9)",
+              lineHeight: 1.2,
+              marginTop: 1 * scale,
             }}
           >
             {PRESENCE_LABELS[config.presence]}
@@ -537,14 +533,13 @@ export const ChatWindow = React.forwardRef<HTMLDivElement, PreviewProps>(functio
           style={{
             display: "flex",
             alignItems: "center",
-            gap: 14 * scale,
+            gap: 16 * scale,
             color: "#fff",
           }}
         >
-          <Phone size={20 * scale} strokeWidth={1.8} />
-          <Video size={20 * scale} strokeWidth={1.8} />
-          <Search size={18 * scale} strokeWidth={1.8} />
-          <MoreVertical size={18 * scale} strokeWidth={1.8} />
+          <Phone size={22 * scale} strokeWidth={1.5} />
+          <Video size={22 * scale} strokeWidth={1.5} />
+          <MoreVertical size={22 * scale} strokeWidth={1.5} />
         </div>
       </div>
 
