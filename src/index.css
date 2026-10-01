@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+/* Reset tối giản cho editor app */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", "Noto Sans", "Be Vietnam Pro", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji";
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar mảnh cho editor */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #c9cbd2;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a9abb4;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Conversation trong Chat Preview — scrollbar gần như ẩn (mobile-like) */
+.zlo-conversation {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(0, 0, 0, 0.18) transparent;
+}
+.zlo-conversation::-webkit-scrollbar {
+  width: 4px;
+}
+.zlo-conversation::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 2px;
+}
+.zlo-conversation::-webkit-scrollbar-track {
+  background: transparent;
+}
