@@ -135,13 +135,23 @@ function Bubble({
   const padH = compact ? 9 : DIMENSIONS.bubblePadH;
 
   return (
+    // Bubble root == CHÍNH bubble: mang nền/viền/bo góc/padding để timestamp
+    // nằm BÊN TRONG bubble (chiều cao bubble tự tăng để chứa timestamp).
     <div
       style={{
         display: "flex",
         flexDirection: "column",
-        alignItems: isMe ? "flex-end" : "flex-start",
+        // flex-start: con co theo max-content (KHÔNG stretch) → tránh wrap sớm
+        // do bề rộng sub-pixel khi bubble rất ngắn
+        alignItems: "flex-start",
         maxWidth: `${maxWidthPct}%`,
+        width: "fit-content",
         marginLeft, // inset cho tin đến — % resolve theo THREAD (không phải wrapper)
+        padding: `${padV}px ${padH}px`,
+        borderRadius: radiusFinal,
+        background: isMe ? COLORS.outgoingBg : COLORS.incomingBg,
+        boxShadow: isMe ? undefined : SHADOWS.bubbleIn,
+        border: isMe ? "none" : `1px solid ${COLORS.divider}`,
       }}
     >
       {senderName && (
@@ -150,7 +160,6 @@ function Bubble({
             fontSize: 12,
             fontWeight: 600,
             color: "#4C65A8",
-            marginBottom: 2,
             paddingLeft: 2,
           }}
         >
@@ -160,15 +169,10 @@ function Bubble({
       {messageKind === "image" && imageSrc ? (
         <div
           style={{
-            borderRadius: radiusFinal,
+            borderRadius: radius - 4,
             overflow: "hidden",
-            background: isMe ? COLORS.outgoingBg : COLORS.incomingBg,
-            padding: 4,
-            boxShadow: isMe ? undefined : SHADOWS.bubbleIn,
-            border: isMe ? "none" : `1px solid ${COLORS.divider}`,
-            // Image bubble: co theo content; clamp ở Bubble root (maxWidth 78%)
-            width: "fit-content",
-            minWidth: 0,
+            display: "block",
+            lineHeight: 0,
           }}
         >
           <img
@@ -184,32 +188,25 @@ function Bubble({
           />
         </div>
       ) : (
+        // MessageText — nằm trong bubble, timestamp nằm dưới nội dung này
         <div
           style={{
-            padding: `${padV}px ${padH}px`,
-            borderRadius: radiusFinal,
-            background: isMe ? COLORS.outgoingBg : COLORS.incomingBg,
             color: COLORS.messageText,
             fontSize: 15,
             lineHeight: 1.35, // compact, không giãn
-            // Nội bubble: co theo CONTENT; wrap do Bubble root clamp (maxWidth 78%)
-            // KHÔNG set maxWidth ở đây → tránh circular % gây wrap sớm
             width: "fit-content",
             minWidth: 0,
             // Text: pre-wrap, word-break NORMAL, chỉ break chữ khi cần (KHÔNG break-all/anywhere)
             whiteSpace: "pre-wrap",
             wordBreak: "normal",
             overflowWrap: "break-word",
-            boxShadow: isMe ? undefined : SHADOWS.bubbleIn,
-            border: isMe ? "none" : `1px solid ${COLORS.divider}`,
           }}
         >
           {text || " "}
         </div>
       )}
-      {/* Timestamp — cùng khối với bubble; căn theo MÉP TRÁI của chính bubble.
-          Root width == bubble width nên alignSelf:flex-start bám đúng mép trái bubble,
-          KHÔNG bị đẩy ra mép phải conversation. Không dùng position:absolute. */}
+      {/* Timestamp — BÊN TRONG bubble, dưới MessageText, căn mép TRÁI bên trong bubble.
+          Không position:absolute; nằm trong flow nên tính vào chiều cao bubble. */}
       {time && (
         <span
           style={{
@@ -218,7 +215,6 @@ function Bubble({
             color: COLORS.messageTimeColor,
             marginTop: 3,
             alignSelf: "flex-start",
-            paddingLeft: 2,
             whiteSpace: "nowrap",
           }}
         >
