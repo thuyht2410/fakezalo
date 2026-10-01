@@ -108,6 +108,7 @@ function Bubble({
   imageSrc,
   maxWidthPct,
   senderName,
+  time,
   compact = false,
   marginLeft = 0,
 }: {
@@ -117,6 +118,8 @@ function Bubble({
   imageSrc?: string;
   maxWidthPct: number;
   senderName?: string;
+  /** Timestamp — thuộc CÙNG message item với bubble này (không định vị theo conversation) */
+  time?: string;
   compact?: boolean;
   marginLeft?: number; // inset từ trái (avatar) — margin KHÔNG ảnh hưởng containing block
 }) {
@@ -204,6 +207,24 @@ function Bubble({
           {text || " "}
         </div>
       )}
+      {/* Timestamp — cùng khối với bubble; căn theo MÉP TRÁI của chính bubble.
+          Root width == bubble width nên alignSelf:flex-start bám đúng mép trái bubble,
+          KHÔNG bị đẩy ra mép phải conversation. Không dùng position:absolute. */}
+      {time && (
+        <span
+          style={{
+            fontSize: 10,
+            lineHeight: 1.2,
+            color: COLORS.messageTimeColor,
+            marginTop: 3,
+            alignSelf: "flex-start",
+            paddingLeft: 2,
+            whiteSpace: "nowrap",
+          }}
+        >
+          {time}
+        </span>
+      )}
     </div>
   );
 }
@@ -245,7 +266,6 @@ function IncomingMessageGroup({
   messages: MessageItem[];
   config: ChatConfig;
 }) {
-  const last = messages[messages.length - 1];
   return (
     <div style={{ position: "relative" }}>
       {/* Avatar overlay — absolute, top */}
@@ -263,7 +283,7 @@ function IncomingMessageGroup({
           width: "100%",
         }}
       >
-        {messages.map((m) => (
+        {messages.map((m, i) => (
           <Bubble
             key={m.id}
             sender="friend"
@@ -272,25 +292,11 @@ function IncomingMessageGroup({
             imageSrc={m.imageSrc}
             maxWidthPct={config.bubbleMaxWidth}
             compact
+            // Timestamp gắn vào CHÍNH bubble cuối cụm — bám mép trái bubble, không theo avatar
+            time={i === messages.length - 1 ? m.time : undefined}
             marginLeft={INCOMING_INSET} // margin không ảnh hưởng containing block → maxWidth theo THREAD
           />
         ))}
-        {last?.time && (
-          <span
-            style={{
-              fontSize: 9,
-              lineHeight: 1.2,
-              color: COLORS.messageTimeColor,
-              marginTop: 2,
-              marginLeft: INCOMING_INSET,
-              alignSelf: "flex-start",
-              paddingLeft: 2,
-              paddingRight: 2,
-            }}
-          >
-            {last.time}
-          </span>
-        )}
       </div>
     </div>
   );
@@ -326,22 +332,9 @@ function OutgoingMessageRow({
           imageSrc={item.imageSrc}
           maxWidthPct={config.bubbleMaxWidth}
           compact
+          // Timestamp nằm trong chính bubble này, căn mép TRÁI của bubble
+          time={isLastInGroup ? item.time : undefined}
         />
-        {isLastInGroup && item.time && (
-          <span
-            style={{
-              fontSize: 9,
-              lineHeight: 1.2,
-              color: COLORS.messageTimeColor,
-              marginTop: 2,
-              alignSelf: "flex-end",
-              paddingLeft: 2,
-              paddingRight: 2,
-            }}
-          >
-            {item.time}
-          </span>
-        )}
       </div>
     </div>
   );
