@@ -514,23 +514,23 @@ export const ChatWindow = React.forwardRef<HTMLDivElement, PreviewProps>(functio
         <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "center" }}>
           <div
             style={{
-              fontSize: 14 * scale,
+              fontSize: 16 * scale,
               fontWeight: 600,
               color: "#fff",
               whiteSpace: "nowrap",
               overflow: "hidden",
               textOverflow: "ellipsis",
-              lineHeight: 1.2,
+              lineHeight: 1.25,
             }}
           >
             {config.name || "…"}
           </div>
           <div
             style={{
-              fontSize: 11 * scale,
+              fontSize: 13 * scale,
               fontWeight: 400,
               color: "rgba(255,255,255,0.9)",
-              lineHeight: 1.2,
+              lineHeight: 1.25,
               marginTop: 1 * scale,
             }}
           >
